@@ -10,10 +10,11 @@ export const columns = [
 	}),
 	columnHelper.accessor("value.redirectURL", {
 		cell: (info) => {
-			const password = info.getValue();
+			const url = info.getValue();
+			if (!url) return <span className="text-gray-400">N/A</span>;
 			return (
-				<a href={password} className="text-left text-blue-500 hover:underline">
-					{password.length > 70 ? `${password.substring(0, 70)}...` : password}
+				<a href={url} className="text-left text-blue-500 hover:underline">
+					{url.length > 70 ? `${url.substring(0, 70)}...` : url}
 				</a>
 			);
 		},
