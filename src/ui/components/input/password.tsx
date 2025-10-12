@@ -33,6 +33,12 @@ export const PasswordInput = <T extends string[]>({
 					{blink ? <IoMdEye /> : <IoMdEyeOff />}
 				</button>
 			</div>
+			<button
+				onClick={() => checkPassword(password, ...args)}
+				className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-colors"
+			>
+				Login
+			</button>
 		</div>
 	);
 };
