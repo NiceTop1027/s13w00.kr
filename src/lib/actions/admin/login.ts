@@ -4,7 +4,7 @@ import { createHash } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const loginAdmin = (password: string) => {
+export const loginAdmin = async (password: string): Promise<void | { error: string }> => {
 	const envPassword = process.env.PASSWORD;
 	
 	if (!envPassword) {
@@ -23,7 +23,8 @@ export const loginAdmin = (password: string) => {
 			},
 		);
 
-		return redirect("/admin");
+		redirect("/admin");
+		return;
 	}
 	
 	return { error: "Incorrect password" };

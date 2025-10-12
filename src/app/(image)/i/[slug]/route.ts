@@ -52,7 +52,7 @@ export async function GET(_: Request, {params}: { params: Params }) {
 
   const png = await sharp(Buffer.from(svg)).png().toBuffer();
 
-  return new NextResponse(png, {
+  return new NextResponse(png as unknown as BodyInit, {
     status: 200,
     headers: {
       "Content-Type": "image/png",
