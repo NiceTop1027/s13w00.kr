@@ -5,7 +5,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export const loginAdmin = (password: string) => {
-	if (password === process.env.PASSWORD) {
+	const envPassword = process.env.PASSWORD;
+	
+	if (!envPassword) {
+		return { error: "Server configuration error: PASSWORD not set" };
+	}
+	
+	if (password === envPassword) {
 		cookies().set(
 			"session",
 			createHash("sha512").update(password).digest("hex"),
@@ -19,4 +25,6 @@ export const loginAdmin = (password: string) => {
 
 		return redirect("/admin");
 	}
+	
+	return { error: "Incorrect password" };
 };

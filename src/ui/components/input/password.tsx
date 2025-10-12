@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 interface PasswordInputProps<T extends string[] = []> {
-	checkPassword: (password: string, ...args: T) => void;
+	checkPassword: (password: string, ...args: T) => Promise<void | { error: string }>;
 	args: T;
 }
 
@@ -12,6 +12,15 @@ export const PasswordInput = <T extends string[]>({
 }: PasswordInputProps<T>) => {
 	const [blink, setBlink] = useState(false);
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+
+	const handleSubmit = async () => {
+		setError("");
+		const result = await checkPassword(password, ...args);
+		if (result && typeof result === "object" && "error" in result) {
+			setError(result.error as string);
+		}
+	};
 
 	return (
 		<div className=" flex flex-col gap-5 text-center bg-gray-950 p-3 rounded-xl">
@@ -23,7 +32,7 @@ export const PasswordInput = <T extends string[]>({
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					onKeyDown={(e) =>
-						e.key === "Enter" && checkPassword(password, ...args)
+						e.key === "Enter" && handleSubmit()
 					}
 				/>
 				<button
@@ -33,8 +42,11 @@ export const PasswordInput = <T extends string[]>({
 					{blink ? <IoMdEye /> : <IoMdEyeOff />}
 				</button>
 			</div>
+			{error && (
+				<p className="text-red-500 text-sm">{error}</p>
+			)}
 			<button
-				onClick={() => checkPassword(password, ...args)}
+				onClick={handleSubmit}
 				className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-colors"
 			>
 				Login
